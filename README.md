@@ -14,7 +14,7 @@ Hebrew, right-to-left, one page. Fonts and images are self-hosted. The only requ
 - TypeScript, strict, for the page behavior. `src/scripts/main.ts` is the only place that wires features together.
 - CSS split by component. `src/styles/main.css` only lists the import order.
 - Vitest for the pure logic. Playwright and axe-core for the built site in Chrome, Firefox, WebKit, and mobile Safari.
-- Cloudflare serves `dist/`. `wrangler.jsonc` points at that folder and serves the built 404 page for unknown paths. This repo does not deploy anything.
+- Cloudflare serves `dist/`. `wrangler.jsonc` points at that folder and serves the built 404 page for unknown paths. GitHub Actions only runs checks. Publishing is a local `npx wrangler deploy` after the build.
 
 ## Layout
 
@@ -46,9 +46,48 @@ Requires Node 22 or newer (`engines` and `.nvmrc`).
 | `npm run check`       | Typecheck, lint, unit tests, and a production build |
 | `npm run test:e2e`    | Builds, then runs Playwright against the preview    |
 | `npm run test:chrome` | The same suite, Chrome only                         |
-| `npm run build`       | Writes `dist/`                                      |
+| `npm run build`       | Replaces `dist/`                                    |
+| `npm run preview`     | Serves the built `dist/` at `http://127.0.0.1:4173` |
 
 `npm run check` covers ESLint (strict TypeScript), Stylelint, html-validate, and Prettier.
+
+## Update the live site
+
+`dist/` is build output. `.gitignore` excludes it, so a Git push does not publish the site and hand-edits in `dist/` are discarded on the next build.
+
+1. Edit `src/` or `public/`.
+2. Rebuild. `npm run build` empties `dist/` and writes a new copy. Vite fingerprints files under `dist/assets/`. Files in `public/` (`_headers`, `robots.txt`, `sitemap.xml`, favicons, `media/`) are copied through unchanged.
+3. Look at the result with `npm run preview`.
+4. From the repo root, publish that `dist/`:
+
+```
+npx wrangler deploy
+```
+
+`wrangler.jsonc` is the Cloudflare config: the Worker name is `hugi-law-firm-website`, and unknown paths use the built 404 page. Deploy only after a fresh build, so Cloudflare is not serving a stale `dist/`.
+
+Commit the source change. Tag the commit that was deployed, for example `prod-2026-10-06`. The tag is the record of what was published, because `dist/` itself is not in Git.
+
+## Keep these in step
+
+**Public domain.** If `hugilaw.co.il` changes, update the same origin in all of these:
+
+- `src/index.html` — canonical, Open Graph, and the LegalService JSON-LD. A comment in `<head>` marks the spot.
+- `public/robots.txt`
+- `public/sitemap.xml`, including `lastmod`
+
+`public/_headers` already sends `X-Robots-Tag: noindex` for `workers.dev` and `pages.dev` hostnames.
+
+**Contact form.** The form posts to `https://api.web3forms.com/submit`. The hidden `access_key` in `src/index.html` chooses which Web3Forms form receives it. The key is public by design. Replacing it means creating the form in that Web3Forms account and pasting the new key. The fields the page sends are `name`, `phone`, and `message`.
+
+How long Web3Forms keeps a submission is set in the dashboard, not in the repo: Form Settings → Advanced Options. It is currently 7 days, and the privacy policy says so. Change the policy in the same edit if that setting changes.
+
+`public/_headers` allows the browser to call only `https://api.web3forms.com`. A different form host needs a CSP change and a privacy-policy change.
+
+**Facts on the page.** Update every copy together:
+
+- The office is floor 37, מגדל משה אביב (שער העיר), ז'בוטינסקי 7, רמת גן. Jabotinsky is the street. The tower name is Moshe Aviv (Shaar HaIr). The same address appears in the contact block, the privacy policy, the accessibility statement, and the JSON-LD.
+- The Google rating line includes the month it was checked. Change the score and the date together.
 
 ## Quality bar
 
