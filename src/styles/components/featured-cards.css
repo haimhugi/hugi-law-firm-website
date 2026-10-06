@@ -1,0 +1,87 @@
+/* ── FEATURED CARDS (LW-style) ── */
+.featured {
+  background: var(--bg);
+  padding-block: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+}
+
+.feat-card {
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.18s;
+}
+.feat-card:first-child { border-left: none; }
+.feat-card:hover { background: var(--bg-alt); }
+
+.feat-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.feat-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.feat-card:hover .feat-img img { transform: scale(1.03); }
+
+.feat-body {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.feat-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.feat-title {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.feat-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.18s;
+}
+.feat-card:hover .feat-link { gap: 10px; }
+
+@media (max-width: 768px) {
+  .featured-grid { grid-template-columns: 1fr; }
+
+  .feat-card {
+    border-left: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .feat-card:last-child { border-bottom: none; }
+  .hero-section { min-height: 75vh; }
+}

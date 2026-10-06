@@ -1,0 +1,75 @@
+/* ── MILUIM SECTION ─── */
+.miluim {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding-block: 48px;
+}
+
+.miluim-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-inline: 24px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.miluim-img {
+  width: min(200px, 100%);
+  max-width: 100%;
+  height: auto;
+  flex-shrink: 1;
+  border-radius: 6px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.miluim-text {
+  flex: 1;
+  min-width: min(240px, 100%);
+}
+
+.miluim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #08122A;
+  color: #FFF;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+
+.miluim-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.25;
+  margin-bottom: 12px;
+  text-wrap: balance;
+}
+
+.miluim-desc {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 520px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .miluim-badge {
+    background: #1A2E1A;
+    color: #7CB87C;
+  }
+}
+
+:root[data-theme="dark"] .miluim-badge {
+  background: #1A2E1A;
+  color: #7CB87C;
+}

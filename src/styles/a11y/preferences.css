@@ -1,0 +1,63 @@
+:root.a11y-contrast {
+  --bg: #FFF;
+  --bg-alt: #FFF;
+  --surface: #FFF;
+  --border: #000;
+  --text: #000;
+  --muted: #000;
+  --subtle: #000;
+  --placeholder: #000;
+  --accent: #000;
+  --accent-h: #000;
+  --on-accent: #FFF;
+}
+
+:root.a11y-contrast-dark {
+  --bg: #000;
+  --bg-alt: #000;
+  --surface: #000;
+  --border: #FFF;
+  --text: #FFF;
+  --muted: #FFF;
+  --subtle: #FFF;
+  --placeholder: #FFF;
+  --accent: #FFF;
+  --accent-h: #FFF;
+  --on-accent: #000;
+  --hero-bg: #000;
+  --hero-text: #FFF;
+  --hero-sub: #FFF;
+  --nav-glass: #000;
+}
+
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+html.a11y-text { font-size: 22px; }
+
+html.a11y-spacing body {
+  letter-spacing: 0.08em;
+  word-spacing: 0.16em;
+}
+html.a11y-leading body { line-height: 2.2; }
+
+html.a11y-font body,
+html.a11y-font button,
+html.a11y-font input,
+html.a11y-font textarea { font-family: Verdana, Arial, sans-serif !important; }
+html.a11y-hide-images img { visibility: hidden; }
+
+html.a11y-motion *,
+html.a11y-motion *::before,
+html.a11y-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html.a11y-sat .page-scroll { filter: saturate(0.2); }
+html.a11y-align-right .page-scroll { text-align: right; }
+html.a11y-align-center .page-scroll { text-align: center; }
+html.a11y-align-left .page-scroll { text-align: left; }

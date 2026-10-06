@@ -1,0 +1,39 @@
+/* ── SECTION SHARED ───────────────────────────────── */
+section { padding-block: 96px; }
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.sec-title {
+  font-family: 'Heebo', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin-bottom: 16px;
+  letter-spacing: -0.015em;
+}
+
+.sec-lead {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 620px;
+  line-height: 1.85;
+}
+
+
+@media (max-width: 640px) {
+  section { padding-block: 60px; }
+}

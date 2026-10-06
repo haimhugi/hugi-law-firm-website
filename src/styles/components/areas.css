@@ -1,0 +1,54 @@
+/* ── AREAS ────────────────────────────────────────── */
+.areas { background: var(--bg); }
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.area-cell {
+  padding: 32px 28px 32px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: visible;
+  transition: background 0.2s;
+}
+
+.area-cell:nth-last-child(-n+3) { border-bottom: none; }
+
+
+
+.area-cell:hover { background: transparent; }
+.area-cell:hover .area-name { color: var(--accent); }
+
+
+.area-name {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+  transition: color 0.18s;
+}
+
+.area-desc {
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+
+@media (max-width: 900px) {
+  .areas-grid { grid-template-columns: repeat(2, 1fr); }
+  .area-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .area-cell:last-child { border-bottom: none; }
+}
+
+@media (max-width: 640px) {
+  .areas-grid { grid-template-columns: 1fr; }
+  .area-cell:not(:last-child) { border-bottom: 1px solid var(--border); }
+}

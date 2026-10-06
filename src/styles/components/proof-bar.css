@@ -1,0 +1,52 @@
+/* ── PROOF BAR ────────────────────────────────────── */
+.proof-bar {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
+}
+
+.proof-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-inline: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.proof-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.proof-num {
+  font-family: 'Heebo', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.proof-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+
+
+@media (max-width: 640px) {
+  .proof-divider { display: none; }
+  .proof-inner { gap: 20px; }
+}

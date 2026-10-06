@@ -1,0 +1,42 @@
+/* ── RESET ───────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Heebo', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.page-scroll {
+  height: 100%;
+  overflow: clip auto;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+
+  /* Keep keyboard-focused elements clear of the floating accessibility/WhatsApp buttons. */
+  scroll-padding-bottom: 130px;
+  overscroll-behavior: none;
+  background: #08122A;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+a { color: inherit; }
+button { font-family: inherit; }

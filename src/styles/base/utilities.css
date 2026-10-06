@@ -1,0 +1,6 @@
+/* Replaces inline style writes so the CSP can drop style-src 'unsafe-inline'. */
+.is-hidden { display: none !important; }
+
+body.is-scroll-locked { overflow: hidden; }
+
+.page-scroll.is-scroll-locked { overflow: hidden; }

@@ -1,0 +1,62 @@
+/* ── TEAM SECTION ─── */
+.team { background: var(--bg-alt); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+}
+
+.team-card {
+  background: transparent;
+  padding: 40px 32px 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: none;
+}
+
+.team-initial {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Frank Ruhl Libre", serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.team-name {
+  font-family: "Frank Ruhl Libre", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.team-role {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.team-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .team-grid { grid-template-columns: 1fr; }
+  .team-card { padding-right: 0; }
+}

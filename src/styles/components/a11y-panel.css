@@ -1,0 +1,122 @@
+/* This query stays above the base rule, matching the original stylesheet, where the base position wins. */
+@media (max-width: 640px) {
+  .a11y-panel {
+    left: 12px;
+    bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── ACCESSIBILITY BTN ── */
+.a11y-btn {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #003087;
+  color: #FFF;
+  border: 2px solid #FFF;
+  border-radius: 999px;
+  padding: 10px 16px;
+  min-height: 44px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+}
+
+.a11y-btn:hover {
+  background: #00236B;
+  color: #FFF;
+}
+
+.a11y-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.a11y-panel {
+  position: fixed;
+  z-index: 260;
+  left: 20px;
+  bottom: calc(128px + env(safe-area-inset-bottom, 0px));
+  width: min(420px, calc(100vw - 24px));
+  max-height: min(72vh, 560px);
+  overflow: auto;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  padding: 14px;
+}
+
+.a11y-panel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.a11y-panel-bar h2 {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.a11y-panel-close {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.a11y-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.a11y-opt {
+  min-height: 88px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+  padding: 12px 8px;
+}
+
+.a11y-opt[aria-pressed="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+  color: var(--accent);
+}
+
+.a11y-reset {
+  width: 100%;
+  margin-top: 12px;
+  min-height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: #003087;
+  color: #FFF;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.a11y-reset:hover { background: #00236B; }
