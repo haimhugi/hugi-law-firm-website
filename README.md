@@ -14,7 +14,7 @@ Hebrew, right-to-left, one page. Fonts and images are self-hosted. The only requ
 - TypeScript, strict, for the page behavior. `src/scripts/main.ts` is the only place that wires features together.
 - CSS split by component. `src/styles/main.css` only lists the import order.
 - Vitest for the pure logic. Playwright and axe-core for the built site in Chrome, Firefox, WebKit, and mobile Safari.
-- Cloudflare serves `dist/`. `wrangler.jsonc` points at that folder and serves the built 404 page for unknown paths. GitHub Actions only runs checks. Publishing is a local `npx wrangler deploy` after the build.
+- Cloudflare serves `dist/`. `wrangler.jsonc` points at that folder and serves the built 404 page for unknown paths. A push to `main` runs the checks, then publishes that build. Pull requests only run the checks.
 
 ## Layout
 
@@ -53,7 +53,7 @@ Requires Node 22 or newer (`engines` and `.nvmrc`).
 
 ## Update the live site
 
-`dist/` is build output. `.gitignore` excludes it, so a Git push does not publish the site and hand-edits in `dist/` are discarded on the next build.
+`dist/` is build output. `.gitignore` excludes it, so hand-edits in `dist/` are discarded on the next build. A push to `main` publishes a fresh build after the checks pass. The deploy step needs the GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
 
 1. Edit `src/` or `public/`.
 2. Rebuild. `npm run build` empties `dist/` and writes a new copy. Vite fingerprints files under `dist/assets/`. Files in `public/` (`_headers`, `robots.txt`, `sitemap.xml`, favicons, `media/`) are copied through unchanged.

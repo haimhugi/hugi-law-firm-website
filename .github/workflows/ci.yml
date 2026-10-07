@@ -23,3 +23,10 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+      - name: Deploy to Cloudflare
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
