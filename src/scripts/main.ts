@@ -8,6 +8,7 @@ import { createWeb3FormsSubmitter } from './features/contact/form-submitter';
 import { initAccordion } from './features/faq/accordion';
 import { initModals } from './features/modal/modal-manager';
 import { initFocusScroll } from './features/navigation/focus-scroll';
+import { initHashScroll } from './features/navigation/hash-scroll';
 import { initMobileMenu } from './features/navigation/mobile-menu';
 import { initNavPicker } from './features/navigation/nav-picker';
 import { initThemeToggle } from './features/theme/theme-toggle';
@@ -33,6 +34,7 @@ const pageScroll = requireElement<HTMLElement>('page-scroll');
 const floaters = document.querySelector('.floaters');
 if (!(floaters instanceof HTMLElement)) throw new Error('Missing .floaters');
 initFocusScroll(pageScroll, floaters);
+initHashScroll(pageScroll);
 
 initMobileMenu({
   button: requireElement<HTMLButtonElement>('hamBtn'),

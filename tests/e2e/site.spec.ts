@@ -262,6 +262,31 @@ test.describe('reduced motion', () => {
   });
 });
 
+test.describe('hash links', () => {
+  test('opening the page at a section scrolls that section below the navigation', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/index.html#contact');
+    await page.evaluate(() => document.fonts.ready);
+    const position = await page.evaluate(() => {
+      const contact = document.querySelector('#contact');
+      const nav = document.querySelector('#site-nav');
+      const scroller = document.querySelector('#page-scroll');
+      if (!contact || !nav || !scroller) return null;
+      return {
+        scrollTop: scroller.scrollTop,
+        contactTop: contact.getBoundingClientRect().top,
+        navBottom: nav.getBoundingClientRect().bottom,
+      };
+    });
+    if (!position) throw new Error('contact section was not measured');
+    expect(position.scrollTop).toBeGreaterThan(200);
+    expect(position.contactTop).toBeGreaterThanOrEqual(position.navBottom - 2);
+    expect(position.contactTop).toBeLessThan(position.navBottom + 24);
+  });
+});
+
 test.describe('layout', () => {
   test('no horizontal scrolling at 320px with large text, spacing, line height and readable font', async ({
     page,
