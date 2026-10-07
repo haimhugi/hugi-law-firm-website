@@ -2,8 +2,9 @@
 .disclaimer-bar {
   background: var(--bg-alt);
   border-top: 1px solid var(--border);
-  padding: 12px 0;
+  padding: 12px 20px;
   text-align: center;
   font-size: 0.78rem;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }

@@ -43,15 +43,6 @@ footer {
 
 .foot-links a:hover { color: #FFF; }
 
-
-@media (max-width: 640px) {
-  .foot-inner {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-  }
-}
-
 /* footer legal links */
 .foot-legal {
   display: flex;
@@ -77,4 +68,18 @@ footer {
 .foot-legal button:focus-visible {
   outline: 2px solid #003087;
   outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .foot-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .foot-links,
+  .foot-legal {
+    justify-content: center;
+  }
 }
