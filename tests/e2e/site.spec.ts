@@ -119,6 +119,13 @@ test.describe('accessibility scans', () => {
     await expectNoA11yViolations(page, '#contact');
   });
 
+  test('dark contrast keeps form errors readable', async ({ page }) => {
+    await gotoHome(page);
+    await toggleA11yOption(page, 'contrastDark');
+    await page.click('#submitBtn');
+    await expectNoA11yViolations(page, '#contact');
+  });
+
   test('mobile menu open', async ({ page, isMobile }) => {
     if (!isMobile) await page.setViewportSize({ width: 390, height: 844 });
     await gotoHome(page);
@@ -172,6 +179,15 @@ test.describe('contact form', () => {
     await page.fill('#fphone', '   ');
     await page.click('#submitBtn');
     await expect(page.locator('#fphone-error')).toHaveText('נא למלא מספר טלפון.');
+  });
+
+  test('a phone without enough digits is rejected', async ({ page }) => {
+    await gotoHome(page);
+    await page.fill('#fname', 'בדיקה');
+    await page.fill('#fphone', 'abc');
+    await page.click('#submitBtn');
+    await expect(page.locator('#fphone-error')).toHaveText('נא להזין מספר טלפון עם 7 ספרות לפחות.');
+    await expect(page.locator('#fphone')).toBeFocused();
   });
 
   test('successful send clears the form and the button resets on new input', async ({ page }) => {
@@ -260,6 +276,27 @@ test.describe('layout', () => {
       clientWidth: el.clientWidth,
     }));
     expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+    await page.locator('#fmsg-note').scrollIntoViewIfNeeded();
+    const covered = await page.evaluate(() => {
+      const floaters = [...document.querySelectorAll('.floaters > *')].map((el) =>
+        el.getBoundingClientRect(),
+      );
+      return [
+        ...document.querySelectorAll('#contact .wrap p, #contact .wrap label, #contact .wrap h2'),
+      ]
+        .filter((el) => {
+          const box = el.getBoundingClientRect();
+          return floaters.some(
+            (floater) =>
+              box.left < floater.right &&
+              box.right > floater.left &&
+              box.top < floater.bottom &&
+              box.bottom > floater.top,
+          );
+        })
+        .map((el) => (el.textContent || '').trim());
+    });
+    expect(covered).toEqual([]);
   });
 
   test('floating buttons do not cover footer links at the bottom of the page', async ({

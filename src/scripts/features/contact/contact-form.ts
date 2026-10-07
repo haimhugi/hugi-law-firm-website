@@ -5,6 +5,7 @@ import { validateContact } from './validation';
 export interface ContactCopy {
   nameRequired: string;
   phoneRequired: string;
+  phoneInvalid: string;
   fixFields: string;
   label: string;
   pending: string;
@@ -80,12 +81,13 @@ export function initContactForm(
   });
 
   async function send(): Promise<void> {
+    const payload = new FormData(form);
+    const fields = [name, phone, message];
     showStatus('');
     submitButton.textContent = options.copy.pending;
     submitButton.disabled = true;
     submitButton.classList.remove('is-sent');
-
-    const payload = new FormData(form);
+    for (const field of fields) field.disabled = true;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       controller.abort();
@@ -108,6 +110,7 @@ export function initContactForm(
       showStatus(isAbortError(error) ? options.copy.timeout : options.copy.offline, 'is-error');
     } finally {
       clearTimeout(timer);
+      for (const field of fields) field.disabled = false;
       if (!document.activeElement || document.activeElement === document.body) submitButton.focus();
     }
   }

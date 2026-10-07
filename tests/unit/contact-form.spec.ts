@@ -5,6 +5,7 @@ import type { FormSubmitter } from '../../src/scripts/features/contact/form-subm
 const copy: ContactCopy = {
   nameRequired: 'נא למלא שם מלא.',
   phoneRequired: 'נא למלא מספר טלפון.',
+  phoneInvalid: 'נא להזין מספר טלפון עם 7 ספרות לפחות.',
   fixFields: 'יש לתקן את השדות המסומנים.',
   label: 'שלח הודעה',
   pending: 'שולח...',
@@ -96,6 +97,62 @@ describe('contact form', () => {
     });
     expect(name.value).toBe('בדיקה');
     expect(form.querySelector<HTMLButtonElement>('#submitBtn')?.disabled).toBe(false);
+  });
+
+  it('rejects a phone number without enough digits', () => {
+    const form = mountForm();
+    initContactForm(
+      form,
+      submitterOf(() => Promise.resolve({ ok: true })),
+      { timeoutMs: 15_000, copy },
+    );
+    const name = form.querySelector<HTMLInputElement>('#fname');
+    const phone = form.querySelector<HTMLInputElement>('#fphone');
+    if (!name || !phone) throw new Error('fields missing');
+    name.value = 'בדיקה';
+    phone.value = 'abc';
+    form.requestSubmit();
+    expect(document.querySelector('#fphone-error')?.textContent).toBe(copy.phoneInvalid);
+    expect(document.activeElement?.id).toBe('fphone');
+  });
+
+  it('disables the fields while sending and keeps the snapshot that was taken first', async () => {
+    let sentPhone = '';
+    let release: (result: { ok: true }) => void = () => {};
+    const form = mountForm();
+    initContactForm(
+      form,
+      submitterOf(
+        (body) =>
+          new Promise((resolve) => {
+            const value = body.get('phone');
+            sentPhone = typeof value === 'string' ? value : '';
+            release = resolve;
+          }),
+      ),
+      { timeoutMs: 15_000, copy },
+    );
+    const name = form.querySelector<HTMLInputElement>('#fname');
+    const phone = form.querySelector<HTMLInputElement>('#fphone');
+    const message = form.querySelector<HTMLInputElement>('#fmsg');
+    if (!name || !phone || !message) throw new Error('fields missing');
+    name.value = 'בדיקה';
+    phone.value = '0541234567';
+    message.value = 'חוזה';
+    form.requestSubmit();
+    await vi.waitFor(() => {
+      expect(phone.disabled).toBe(true);
+    });
+    expect(name.disabled).toBe(true);
+    expect(message.disabled).toBe(true);
+    expect(sentPhone).toBe('0541234567');
+    phone.value = '0508765432';
+    release({ ok: true });
+    await vi.waitFor(() => {
+      expect(document.querySelector('#formMsg')?.textContent).toBe(copy.success);
+    });
+    expect(phone.disabled).toBe(false);
+    expect(phone.value).toBe('');
   });
 
   it('keeps the message when the request times out', async () => {

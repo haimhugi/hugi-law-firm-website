@@ -72,6 +72,7 @@ initContactForm(
     copy: {
       nameRequired: he.nameRequired,
       phoneRequired: he.phoneRequired,
+      phoneInvalid: he.phoneInvalid,
       fixFields: he.fixFields,
       label: he.submitLabel,
       pending: he.submitPending,

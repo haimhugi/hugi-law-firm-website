@@ -10,6 +10,8 @@
   --accent: #000;
   --accent-h: #000;
   --on-accent: #FFF;
+  --danger: #9F1239;
+  --ok: #14532D;
 }
 
 :root.a11y-contrast-dark {
@@ -28,6 +30,36 @@
   --hero-text: #FFF;
   --hero-sub: #FFF;
   --nav-glass: #000;
+  --danger: #FECDD3;
+  --ok: #D1FAE5;
+}
+
+/* Enlarged text and spacing must not inflate the fixed contact buttons. */
+html:is(.a11y-text, .a11y-spacing, .a11y-leading) .floaters {
+  letter-spacing: normal;
+  word-spacing: normal;
+  line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  html:is(.a11y-text, .a11y-spacing, .a11y-leading) :is(.wrap, .hero-inner, .proof-inner, .foot-inner) {
+    padding-left: 76px;
+  }
+
+  html:is(.a11y-text, .a11y-spacing, .a11y-leading) :is(.a11y-btn, .wa-btn) {
+    justify-content: center;
+    gap: 0;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  html:is(.a11y-text, .a11y-spacing, .a11y-leading) .a11y-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
 }
 
 html.a11y-links a {

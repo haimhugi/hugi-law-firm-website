@@ -8,6 +8,7 @@ export const he = {
   menuClose: 'סגור תפריט',
   nameRequired: 'נא למלא שם מלא.',
   phoneRequired: 'נא למלא מספר טלפון.',
+  phoneInvalid: 'נא להזין מספר טלפון עם 7 ספרות לפחות.',
   fixFields: 'יש לתקן את השדות המסומנים.',
   submitLabel: 'שלח הודעה',
   submitPending: 'שולח...',
