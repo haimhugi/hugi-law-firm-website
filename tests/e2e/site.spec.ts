@@ -165,12 +165,48 @@ test.describe('keyboard and dialogs', () => {
 });
 
 test.describe('contact form', () => {
-  test('only name and phone are required', async ({ page }) => {
+  test('name, phone and privacy consent are required', async ({ page }) => {
     await gotoHome(page);
     await page.click('#submitBtn');
     await expect(page.locator('#fname-error')).toHaveText('נא למלא שם מלא.');
     await expect(page.locator('#fphone-error')).toHaveText('נא למלא מספר טלפון.');
+    await expect(page.locator('#fconsent-error')).toHaveText(
+      'יש לאשר את מדיניות הפרטיות כדי לשלוח את הפנייה.',
+    );
     await expect(page.locator('#fname')).toBeFocused();
+  });
+
+  test('the consent checkbox starts unchecked and blocks sending until it is checked', async ({
+    page,
+  }) => {
+    let requests = 0;
+    await mockWeb3Forms(page, async (route) => {
+      requests += 1;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: '{"success":true}',
+      });
+    });
+    await gotoHome(page);
+    await expect(page.locator('#fconsent')).not.toBeChecked();
+    await page.fill('#fname', 'בדיקה');
+    await page.fill('#fphone', '0541234567');
+    await page.click('#submitBtn');
+    await expect(page.locator('#fconsent')).toBeFocused();
+    expect(requests).toBe(0);
+    await page.click('label[for="fconsent"]');
+    await expect(page.locator('#fconsent-error')).toBeHidden();
+    await page.click('#submitBtn');
+    await expect(page.locator('#formMsg')).toHaveText('ההודעה נשלחה בהצלחה. נחזור אליכם בהקדם.');
+    expect(requests).toBe(1);
+  });
+
+  test('the link next to the checkbox opens the privacy policy', async ({ page }) => {
+    await gotoHome(page);
+    await page.click('#contactForm [data-open-modal="privacyModal"]');
+    await expect(page.locator('#privacyModal')).toHaveClass(/open/);
+    await expect(page.locator('#fconsent')).not.toBeChecked();
   });
 
   test('a phone field with only spaces counts as empty', async ({ page }) => {
@@ -192,8 +228,11 @@ test.describe('contact form', () => {
 
   test('successful send clears the form and the button resets on new input', async ({ page }) => {
     let sentPhone;
+    let sentConsent;
     await mockWeb3Forms(page, async (route) => {
-      sentPhone = /name="phone"\r\n\r\n([^\r]*)/.exec(route.request().postData() || '')?.[1];
+      const body = route.request().postData() || '';
+      sentPhone = /name="phone"\r\n\r\n([^\r]*)/.exec(body)?.[1];
+      sentConsent = /name="privacy_consent"\r\n\r\n([^\r]*)/.exec(body)?.[1];
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -203,10 +242,13 @@ test.describe('contact form', () => {
     await gotoHome(page);
     await page.fill('#fname', 'בדיקה');
     await page.fill('#fphone', 'נייד: 054 123 4567');
+    await page.check('#fconsent');
     await page.click('#submitBtn');
     await expect(page.locator('#formMsg')).toHaveText('ההודעה נשלחה בהצלחה. נחזור אליכם בהקדם.');
     expect(sentPhone).toBe('נייד: 054 123 4567');
+    expect(sentConsent).toBe('אושרה מדיניות הפרטיות (גרסת נובמבר 2026)');
     await expect(page.locator('#fname')).toHaveValue('');
+    await expect(page.locator('#fconsent')).not.toBeChecked();
     await expect(page.locator('#submitBtn')).toBeEnabled();
     await page.fill('#fname', 'פנייה נוספת');
     await expect(page.locator('#submitBtn')).toHaveText('שלח הודעה');
@@ -219,6 +261,7 @@ test.describe('contact form', () => {
     await gotoHome(page);
     await page.fill('#fname', 'בדיקה');
     await page.fill('#fphone', '0541234567');
+    await page.check('#fconsent');
     await page.click('#submitBtn');
     await expect(page.locator('#formMsg')).toContainText('03-566-5775');
     await expect(page.locator('#fname')).toHaveValue('בדיקה');
@@ -232,6 +275,7 @@ test.describe('contact form', () => {
     await page.fill('#fname', 'בדיקה');
     await page.fill('#fphone', '0541234567');
     await page.fill('#fmsg', 'חוזה שכירות');
+    await page.check('#fconsent');
     await page.click('#submitBtn');
     await expect(page.locator('#formMsg')).toContainText('השליחה לא הושלמה בזמן', {
       timeout: 25_000,

@@ -78,7 +78,7 @@ Commit the source change. Tag the commit that was deployed, for example `prod-20
 
 `public/_headers` already sends `X-Robots-Tag: noindex` for `workers.dev` and `pages.dev` hostnames.
 
-**Contact form.** The form posts to `https://api.web3forms.com/submit`. The hidden `access_key` in `src/index.html` chooses which Web3Forms form receives it. The key is public by design. Replacing it means creating the form in that Web3Forms account and pasting the new key. The fields the page sends are `name`, `phone`, and `message`.
+**Contact form.** The form posts to `https://api.web3forms.com/submit`. The hidden `access_key` in `src/index.html` chooses which Web3Forms form receives it. The key is public by design. Replacing it means creating the form in that Web3Forms account and pasting the new key. The fields the page sends are `name`, `phone`, `message`, and `privacy_consent`. The form cannot be sent until the privacy checkbox is ticked, and its value names the policy version, so each email records which version the sender accepted. When the policy text changes, update the month in that value and in the policy's "עודכן" line together.
 
 How long Web3Forms keeps a submission is set in the dashboard, not in the repo: Form Settings → Advanced Options. It is currently 7 days, and the privacy policy says so. Change the policy in the same edit if that setting changes.
 

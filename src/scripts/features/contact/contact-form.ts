@@ -1,11 +1,8 @@
 import { requireChild } from '../../core/dom';
 import type { FormSubmitter } from './form-submitter';
-import { validateContact } from './validation';
+import { validateContact, type ValidationCopy } from './validation';
 
-export interface ContactCopy {
-  nameRequired: string;
-  phoneRequired: string;
-  phoneInvalid: string;
+export interface ContactCopy extends ValidationCopy {
   fixFields: string;
   label: string;
   pending: string;
@@ -30,6 +27,7 @@ export function initContactForm(
   const name = requireChild<HTMLInputElement>(form, '#fname');
   const phone = requireChild<HTMLInputElement>(form, '#fphone');
   const message = requireChild<HTMLInputElement>(form, '#fmsg');
+  const consent = requireChild<HTMLInputElement>(form, '#fconsent');
 
   function showStatus(text: string, kind?: 'is-error' | 'is-ok'): void {
     status.textContent = text;
@@ -57,21 +55,32 @@ export function initContactForm(
     submitButton.classList.remove('is-sent');
   }
 
+  function onEdit(input: HTMLInputElement): void {
+    setFieldError(input, '');
+    if (!submitButton.classList.contains('is-sent')) return;
+    resetButton();
+    showStatus('');
+  }
+
   for (const input of [name, phone, message]) {
     input.addEventListener('input', () => {
-      setFieldError(input, '');
-      if (!submitButton.classList.contains('is-sent')) return;
-      resetButton();
-      showStatus('');
+      onEdit(input);
     });
   }
+  consent.addEventListener('change', () => {
+    onEdit(consent);
+  });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const errors = validateContact({ name: name.value, phone: phone.value }, options.copy);
+    const errors = validateContact(
+      { name: name.value, phone: phone.value, consent: consent.checked },
+      options.copy,
+    );
     setFieldError(name, errors.name);
     setFieldError(phone, errors.phone);
-    const invalid = errors.name ? name : errors.phone ? phone : null;
+    setFieldError(consent, errors.consent);
+    const invalid = errors.name ? name : errors.phone ? phone : errors.consent ? consent : null;
     if (invalid) {
       showStatus(options.copy.fixFields, 'is-error');
       invalid.focus();
@@ -82,7 +91,7 @@ export function initContactForm(
 
   async function send(): Promise<void> {
     const payload = new FormData(form);
-    const fields = [name, phone, message];
+    const fields = [name, phone, message, consent];
     showStatus('');
     submitButton.textContent = options.copy.pending;
     submitButton.disabled = true;

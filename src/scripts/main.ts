@@ -75,6 +75,7 @@ initContactForm(
       nameRequired: he.nameRequired,
       phoneRequired: he.phoneRequired,
       phoneInvalid: he.phoneInvalid,
+      consentRequired: he.consentRequired,
       fixFields: he.fixFields,
       label: he.submitLabel,
       pending: he.submitPending,

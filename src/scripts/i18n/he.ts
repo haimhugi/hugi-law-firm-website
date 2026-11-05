@@ -9,6 +9,7 @@ export const he = {
   nameRequired: 'נא למלא שם מלא.',
   phoneRequired: 'נא למלא מספר טלפון.',
   phoneInvalid: 'נא להזין מספר טלפון עם 7 ספרות לפחות.',
+  consentRequired: 'יש לאשר את מדיניות הפרטיות כדי לשלוח את הפנייה.',
   fixFields: 'יש לתקן את השדות המסומנים.',
   submitLabel: 'שלח הודעה',
   submitPending: 'שולח...',
