@@ -6,6 +6,7 @@ const copy: ContactCopy = {
   nameRequired: 'נא למלא שם מלא.',
   phoneRequired: 'נא למלא מספר טלפון.',
   phoneInvalid: 'נא להזין מספר טלפון עם 7 ספרות לפחות.',
+  consentRequired: 'יש לאשר את מדיניות הפרטיות כדי לשלוח את הפנייה.',
   fixFields: 'יש לתקן את השדות המסומנים.',
   label: 'שלח הודעה',
   pending: 'שולח...',
@@ -24,6 +25,8 @@ function mountForm(): HTMLFormElement {
       <input id="fphone" name="phone">
       <p id="fphone-error" hidden></p>
       <input id="fmsg" name="message">
+      <input id="fconsent" name="privacy_consent" type="checkbox" value="yes">
+      <p id="fconsent-error" hidden></p>
       <button id="submitBtn" type="submit">שלח הודעה</button>
       <p id="formMsg"></p>
     </form>
@@ -31,6 +34,12 @@ function mountForm(): HTMLFormElement {
   const form = document.querySelector('#contactForm');
   if (!(form instanceof HTMLFormElement)) throw new Error('fixture form missing');
   return form;
+}
+
+function consentOf(form: HTMLFormElement): HTMLInputElement {
+  const consent = form.querySelector<HTMLInputElement>('#fconsent');
+  if (!consent) throw new Error('consent checkbox missing');
+  return consent;
 }
 
 function submitterOf(submit: FormSubmitter['submit']): FormSubmitter {
@@ -53,14 +62,39 @@ describe('contact form', () => {
     form.requestSubmit();
     expect(document.querySelector('#fname-error')?.textContent).toBe(copy.nameRequired);
     expect(document.querySelector('#fphone-error')?.textContent).toBe(copy.phoneRequired);
+    expect(document.querySelector('#fconsent-error')?.textContent).toBe(copy.consentRequired);
     expect(document.activeElement?.id).toBe('fname');
   });
 
+  it('does not send until the privacy policy is accepted, and clears the error once it is', () => {
+    const submit = vi.fn(() => Promise.resolve({ ok: true as const }));
+    const form = mountForm();
+    initContactForm(form, submitterOf(submit), { timeoutMs: 15_000, copy });
+    const name = form.querySelector<HTMLInputElement>('#fname');
+    const phone = form.querySelector<HTMLInputElement>('#fphone');
+    if (!name || !phone) throw new Error('fields missing');
+    name.value = 'בדיקה';
+    phone.value = '0541234567';
+    form.requestSubmit();
+    const consent = consentOf(form);
+    expect(submit).not.toHaveBeenCalled();
+    expect(document.querySelector('#fconsent-error')?.textContent).toBe(copy.consentRequired);
+    expect(consent.getAttribute('aria-invalid')).toBe('true');
+    expect(document.activeElement?.id).toBe('fconsent');
+    consent.click();
+    expect(document.querySelector<HTMLElement>('#fconsent-error')?.hidden).toBe(true);
+    expect(consent.hasAttribute('aria-invalid')).toBe(false);
+  });
+
   it('clears the form after a successful send and resets the button on new input', async () => {
+    let sentConsent: FormDataEntryValue | null = null;
     const form = mountForm();
     initContactForm(
       form,
-      submitterOf(() => Promise.resolve({ ok: true })),
+      submitterOf((body) => {
+        sentConsent = body.get('privacy_consent');
+        return Promise.resolve({ ok: true });
+      }),
       { timeoutMs: 15_000, copy },
     );
     const name = form.querySelector<HTMLInputElement>('#fname');
@@ -68,10 +102,13 @@ describe('contact form', () => {
     if (!name || !phone) throw new Error('fields missing');
     name.value = 'בדיקה';
     phone.value = '0541234567';
+    consentOf(form).checked = true;
     form.requestSubmit();
     await vi.waitFor(() => {
       expect(document.querySelector('#formMsg')?.textContent).toBe(copy.success);
     });
+    expect(sentConsent).toBe('yes');
+    expect(consentOf(form).checked).toBe(false);
     expect(name.value).toBe('');
     expect(document.querySelector('#submitBtn')?.textContent).toBe(copy.sent);
     name.value = 'פנייה נוספת';
@@ -91,6 +128,7 @@ describe('contact form', () => {
     if (!name || !phone) throw new Error('fields missing');
     name.value = 'בדיקה';
     phone.value = '0541234567';
+    consentOf(form).checked = true;
     form.requestSubmit();
     await vi.waitFor(() => {
       expect(document.querySelector('#formMsg')?.textContent).toContain('03-566-5775');
@@ -139,12 +177,14 @@ describe('contact form', () => {
     name.value = 'בדיקה';
     phone.value = '0541234567';
     message.value = 'חוזה';
+    consentOf(form).checked = true;
     form.requestSubmit();
     await vi.waitFor(() => {
       expect(phone.disabled).toBe(true);
     });
     expect(name.disabled).toBe(true);
     expect(message.disabled).toBe(true);
+    expect(consentOf(form).disabled).toBe(true);
     expect(sentPhone).toBe('0541234567');
     phone.value = '0508765432';
     release({ ok: true });
@@ -174,6 +214,7 @@ describe('contact form', () => {
     name.value = 'בדיקה';
     phone.value = '0541234567';
     message.value = 'חוזה שכירות';
+    consentOf(form).checked = true;
     form.requestSubmit();
     await vi.advanceTimersByTimeAsync(15_000);
     expect(document.querySelector('#formMsg')?.textContent).toContain('השליחה לא הושלמה בזמן');

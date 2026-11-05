@@ -1,11 +1,20 @@
 export interface ContactValues {
   name: string;
   phone: string;
+  consent: boolean;
 }
 
 export interface ContactErrors {
   name: string;
   phone: string;
+  consent: string;
+}
+
+export interface ValidationCopy {
+  nameRequired: string;
+  phoneRequired: string;
+  phoneInvalid: string;
+  consentRequired: string;
 }
 
 const MIN_PHONE_DIGITS = 7;
@@ -25,12 +34,10 @@ function phoneError(phone: string, copy: { phoneRequired: string; phoneInvalid: 
   return '';
 }
 
-export function validateContact(
-  values: ContactValues,
-  copy: { nameRequired: string; phoneRequired: string; phoneInvalid: string },
-): ContactErrors {
+export function validateContact(values: ContactValues, copy: ValidationCopy): ContactErrors {
   return {
     name: values.name.trim() ? '' : copy.nameRequired,
     phone: phoneError(values.phone, copy),
+    consent: values.consent ? '' : copy.consentRequired,
   };
 }
