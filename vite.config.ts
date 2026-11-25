@@ -13,6 +13,7 @@ export default defineConfig({
       input: {
         main: fileURLToPath(new URL('./src/index.html', import.meta.url)),
         notFound: fileURLToPath(new URL('./src/404.html', import.meta.url)),
+        articles: fileURLToPath(new URL('./src/articles/index.html', import.meta.url)),
         articleTikun13: fileURLToPath(
           new URL('./src/articles/tikun-13/index.html', import.meta.url),
         ),
