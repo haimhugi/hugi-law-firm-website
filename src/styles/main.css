@@ -5,6 +5,8 @@
 @import "./components/hero.css";
 @import "./components/proof-bar.css";
 @import "./layout/section.css";
+@import "./components/privacy.css";
+@import "./components/articles.css";
 @import "./components/about.css";
 @import "./components/areas.css";
 @import "./components/process.css";

@@ -1,0 +1,88 @@
+/* ── PRIVACY (featured practice) ──────────────────── */
+
+/* A navy band in both themes, so the white-outline .btn-primary from the hero works here too. */
+.privacy {
+  background: var(--hero-bg);
+  color: #FFF;
+}
+
+.privacy .eyebrow { color: #8FB4E8; }
+
+.privacy .sec-lead {
+  color: #E2E8F0;
+  max-width: 720px;
+}
+
+.privacy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  list-style: none;
+}
+
+.privacy-item {
+  padding: 32px 24px 32px 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.privacy-item:last-child { border-left: none; }
+
+.privacy-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.privacy-desc {
+  font-size: 0.9rem;
+  color: #CBD5E1;
+  line-height: 1.7;
+  padding-left: 20px;
+}
+
+.privacy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  margin-top: 40px;
+}
+
+.privacy-more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #FFF;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.privacy-more:hover { color: #8FB4E8; }
+
+.privacy-more:focus-visible {
+  outline: 2px solid #FFF;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1000px) {
+  .privacy-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .privacy-item {
+    border-left: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media (max-width: 640px) {
+  .privacy-grid { grid-template-columns: 1fr; }
+  .privacy-item { padding: 24px 0; }
+  .privacy-item:last-child { border-bottom: none; }
+
+  .privacy-name,
+  .privacy-desc { padding-left: 0; }
+}
