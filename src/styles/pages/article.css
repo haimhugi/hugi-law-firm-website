@@ -1,0 +1,196 @@
+/* Article pages: a standalone stylesheet, like not-found.css, so articles load no page scripts. */
+@import "../base/fonts.css";
+
+:root {
+  --bg: #FFF;
+  --text: #111827;
+  --muted: #374151;
+  --border: #DCDFE6;
+  --accent: #003087;
+  --accent-h: #00236B;
+  --on-accent: #FFF;
+  --navy: #08122A;
+  --surface: #F4F5F7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131820;
+    --text: #EDE9E1;
+    --muted: #D4CFC8;
+    --border: #2E3844;
+    --accent: #5B8FD4;
+    --accent-h: #6FA0E0;
+    --on-accent: #08122A;
+    --surface: #1B2128;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html { font-size: 17px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Heebo, system-ui, sans-serif;
+  line-height: 1.8;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: -60px;
+  padding: 10px 16px;
+  background: var(--navy);
+  color: #FFF;
+  z-index: 10;
+}
+.skip-link:focus { top: 12px; }
+
+.article-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--navy);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #FFF;
+  font-weight: 700;
+  text-decoration: none;
+}
+.brand img { border-radius: 8px; }
+
+.top-phone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #FFF;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 20px 56px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  margin: 6px 0 8px;
+  font-family: "Frank Ruhl Libre", Heebo, serif;
+  font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+  line-height: 1.3;
+}
+
+.byline {
+  margin-bottom: 28px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+h2 {
+  margin: 34px 0 10px;
+  font-size: 1.35rem;
+  line-height: 1.4;
+}
+
+h3 {
+  margin: 20px 0 6px;
+  font-size: 1.1rem;
+}
+
+p { margin-bottom: 14px; }
+
+ol {
+  margin: 0 0 14px;
+  padding-inline-start: 1.4em;
+}
+li { margin-bottom: 6px; }
+
+.cta {
+  margin: 40px 0 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.cta h2 { margin-top: 0; }
+
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-primary,
+.btn-line {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn-primary:hover { background: var(--accent-h); }
+
+.btn-line {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.disclaimer {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.article-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  background: var(--navy);
+  color: #E2E8F0;
+  font-size: 0.9rem;
+}
+
+.article-foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #FFF;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.article-top a:focus-visible,
+.article-foot a:focus-visible,
+.skip-link:focus-visible {
+  outline-color: #FFF;
+  box-shadow: 0 0 0 6px #5B8FD4;
+}
